@@ -9,6 +9,7 @@ import (
 
 	"github.com/fabric8-services/fabric8-common/configuration"
 	"github.com/fabric8-services/fabric8-common/log"
+	"github.com/fabric8-services/fabric8-common/metric"
 	"github.com/fabric8-services/fabric8-common/sentry"
 	"github.com/fabric8-services/fabric8-starter/app"
 	"github.com/fabric8-services/fabric8-starter/controller"
@@ -17,6 +18,7 @@ import (
 	"github.com/goadesign/goa/middleware"
 	"github.com/goadesign/goa/middleware/gzip"
 	"github.com/google/gops/agent"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -83,7 +85,11 @@ func main() {
 	service.Use(gzip.Middleware(9))
 	service.Use(app.ErrorHandler(service, true))
 	service.Use(middleware.Recover())
-
+	// record HTTP request metrics in prometh
+	service.Use(
+		metric.Recorder(
+			"fabric8-starter",
+			metric.WithRequestDurationBucket(prometheus.ExponentialBuckets(0.05, 2, 8))))
 	service.WithLogger(goalogrus.New(log.Logger()))
 
 	// service.Use(metric.Recorder())

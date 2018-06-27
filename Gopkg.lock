@@ -72,10 +72,11 @@
     "log",
     "login/tokencontext",
     "makefile",
+    "metric",
     "sentry",
     "token"
   ]
-  revision = "29266d5"
+  revision = "d4ab70c"
   source = "github.com/xcoulon/fabric8-common"
 
 [[projects]]
@@ -422,6 +423,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "99b522313b47c0b9974843efdeb2ea4f7d51b09d42bca6495aac199195bce65f"
+  inputs-digest = "4ffa06d688fd057043f90359b36834de4cb64c1560ad74f8585dbeaca069a1fb"
   solver-name = "gps-cdcl"
   solver-version = 1

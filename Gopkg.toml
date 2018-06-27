@@ -58,4 +58,4 @@ ignored = [
 [[constraint]]
   name = "github.com/fabric8-services/fabric8-common"
   source = "github.com/xcoulon/fabric8-common"
-  revision = "29266d5"
+  revision = "7a4b91c"
