@@ -1,5 +1,18 @@
 PROJECT_NAME=fabric8-starter
 PACKAGE_NAME:=github.com/fabric8-services/$(PROJECT_NAME)
+BUILD_DIR = bin
+
+REGISTRY_URI = quay.io
+REGISTRY_NS = ${PROJECT_NAME}
+REGISTRY_IMAGE = ${PROJECT_NAME}
+
+ifeq ($(TARGET),rhel)
+	REGISTRY_URL := ${REGISTRY_URI}/openshiftio/rhel-${REGISTRY_NS}-${REGISTRY_IMAGE}
+	DOCKERFILE := Dockerfile.rhel
+else
+	REGISTRY_URL := ${REGISTRY_URI}/openshiftio/${REGISTRY_NS}-${REGISTRY_IMAGE}
+	DOCKERFILE := Dockerfile
+endif
 
 # -----------------------------------------------------------------------
 # bootstrap
@@ -35,6 +48,9 @@ dev: prebuild-check deps generate $(FRESH_BIN) ## run the server locally
 # -------------------------------------------------------------------
 LDFLAGS=-ldflags "-X ${PACKAGE_NAME}/controller.Commit=${COMMIT} -X ${PACKAGE_NAME}/controller.BuildTime=${BUILD_TIME}"
 
+$(BUILD_DIR):
+	mkdir $(BUILD_DIR)
+
 .PHONY: build
 build: makefiles prebuild-check deps generate ## Build the server
 ifeq ($(OS),Windows_NT)
@@ -42,6 +58,16 @@ ifeq ($(OS),Windows_NT)
 else
 	go build -v $(LDFLAGS) -o $(BINARY_SERVER_BIN)
 endif
+
+.PHONY: build-linux $(BUILD_DIR)
+build-linux: makefiles prebuild-check deps generate ## Builds the Linux binary for the container image into bin/ folder
+	CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -v $(LDFLAGS) -o $(BUILD_DIR)/$(PROJECT_NAME)
+
+image: clean-artifacts build-linux
+	docker build -t $(REGISTRY_URL) \
+	  --build-arg BUILD_DIR=$(BUILD_DIR)\
+	  --build-arg PROJECT_NAME=$(PROJECT_NAME)\
+	  -f $(DOCKERFILE) .
 
 .PHONY: generate
 generate: prebuild-check $(DESIGNS) $(GOAGEN_BIN) $(VENDOR_DIR) ## Generate GOA sources. Only necessary after clean of if changed `design` folder.
