@@ -76,7 +76,7 @@
     "sentry",
     "token"
   ]
-  revision = "d4ab70c"
+  revision = "7a4b91c"
   source = "github.com/xcoulon/fabric8-common"
 
 [[projects]]
@@ -423,6 +423,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4ffa06d688fd057043f90359b36834de4cb64c1560ad74f8585dbeaca069a1fb"
+  inputs-digest = "f89359f900fc7ba1bea22beb64f72692ca566b8cd2ce1176b98cb3e74c70bc22"
   solver-name = "gps-cdcl"
   solver-version = 1

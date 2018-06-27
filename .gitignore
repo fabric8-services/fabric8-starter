@@ -21,3 +21,6 @@ swagger
 
 # tmp dir
 tmp
+
+# IDE generated
+.idea/
