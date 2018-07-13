@@ -1,0 +1,133 @@
+= Fabric8-Starter
+
+Fabric8-starter is a CLI generator for bootstrapping a new Fabric8 project. It initializes a new git repository with the 
+usual stuff that we use in traditional Fabric8 services, including support for configuration, logs, metrics, API endpoints.
+Dependencies are managed by `dep` and most of the packages are imported from https://github.com/fabric8-services/fabric8-common[fabric8-common]. 
+The generated project will contain a `main.go` that takes care of mounting a default `/api/status` endpoint, amongst other things.
+It also includes a makefile, so that a `make build` is enough to fetch the dependencies, generate the GOA code and build a binary (with LDFLAGS).
+
+
+== Example
+
+This file shows an example of project generation:
+
+----
+~/code/go/src/github.com/fabric8-services/fabric8-starter> make build
+cd vendor/github.com/go-bindata/go-bindata/go-bindata && \
+        go build -o go-bindata . && \
+        chmod u+x go-bindata
+vendor/github.com/go-bindata/go-bindata/go-bindata/go-bindata -pkg bootstrap -o bootstrap/bindata.go assets/...
+go build -v  -o /Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-starter/bin/fabric8-starter
+github.com/fabric8-services/fabric8-starter/bootstrap
+github.com/fabric8-services/fabric8-starter/cmd
+
+~/code/go/src/github.com/fabric8-services/fabric8-starter> bin/fabric8-starter help
+fabric8-starter is a CLI tool to initialize a fabric8-services project from scratch
+
+Usage:
+  fabric8-starter [command]
+
+Available Commands:
+  help        Help about the command
+  init        initializes a new fabric8-service project
+
+Flags:
+  -v, --verbose   set the level of logs verbose.
+
+Use "fabric8-starter [command] --help" for more information about a command.
+ 
+~/code/go/src/github.com/fabric8-services/fabric8-starter> bin/fabric8-starter init github.com/fabric8-services/fabric8-foo
+INFO[0000] bootstrapping new project named 'fabric8-foo' in '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo'...
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/Makefile.win'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/design/api.go'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/main.go'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/.gitignore'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/Gopkg.toml'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/Makefile.common'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/Dockerfile.rhel'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/Makefile.lnx'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/Makefile'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/.gofmt_exclude'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/.golint_exclude'
+INFO[0000] generating '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/Dockerfile'
+ 
+~/code/go/src/github.com/fabric8-services/fabric8-starter>  cd /Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo
+ 
+~/code/go/src/github.com/fabric8-services/fabric8-foo> # edit the generated controller/status.go [*]
+
+~/code/go/src/github.com/fabric8-services/fabric8-foo> make build
+mkdir -p /Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/tmp
+mkdir -p /Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/bin
+mkdir -p /Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/tmp/bin
+Installing 'dep' v0.4.1 at '/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/tmp/bin'...
+mkdir -p /Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/tmp/bin
+dep: OK
+checking dependencies with dep
+Root project is "github.com/fabric8-services/fabric8-foo"
+ 2 transitively valid internal packages
+ 29 external packages imported from 8 projects
+(0)   ✓ select (root)
+(1)     ? attempt github.com/fabric8-services/fabric8-common with 7 pkgs; 2 versions to try
+(1)         try github.com/fabric8-services/fabric8-common@master
+...
+(54/54) Wrote golang.org/x/tools@master
+cd vendor/github.com/goadesign/goa/goagen && go build -v
+vendor/github.com/goadesign/goa/goagen/goagen app -d github.com/fabric8-services/fabric8-foo/design
+app
+app/contexts.go
+app/controllers.go
+app/security.go
+app/hrefs.go
+app/media_types.go
+app/user_types.go
+app/test
+app/test/status_testing.go
+vendor/github.com/goadesign/goa/goagen/goagen controller -d github.com/fabric8-services/fabric8-foo/design -o controller/ --pkg controller --app-pkg github.com/fabric8-services/fabric8-foo/app
+controller/status.go
+vendor/github.com/goadesign/goa/goagen/goagen gen -d github.com/fabric8-services/fabric8-foo/design --pkg-path=github.com/fabric8-services/fabric8-common/goasupport/status --out app
+app/status.go
+vendor/github.com/goadesign/goa/goagen/goagen gen -d github.com/fabric8-services/fabric8-foo/design --pkg-path=github.com/fabric8-services/fabric8-common/goasupport/jsonapi_errors_helpers --out app
+goagen271117260/goagen
+--design=github.com/fabric8-services/fabric8-foo/design
+--out=/Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/app
+--version=v1.3.0
+vendor/github.com/goadesign/goa/goagen/goagen swagger -d github.com/fabric8-services/fabric8-foo/design
+swagger
+swagger/swagger.json
+swagger/swagger.yaml
+go build -v -ldflags "-X github.com/fabric8-services/fabric8-foo/app.Commit=HEAD -X github.com/fabric8-services/fabric8-foo/app.BuildTime=`date -u '+%Y-%m-%dT%H:%M:%SZ'`" -o /Users/xcoulon/code/go/src/github.com/fabric8-services/fabric8-foo/bin/fabric8-foo
+
+~/code/go/src/github.com/fabric8-services/fabric8-foo> ./bin/fabric8-foo&
+[1] 95240
+WARN[0000] unable to parse log level configuration error: "not a valid logrus Level: \"\""
+"level":"info","msg":"Running as user name 'xcoulon' with UID 501.","pkg":"main","time":"2018-07-13 16:16:32","username":"xcoulon","uuid":"501"}
+{"gid":"20","groupname":"staff","level":"info","msg":"Running as as group 'staff' with GID 20.","pkg":"main","time":"2018-07-13 16:16:32"}
+{"level":"info","msg":"metrics registered successfully","pkg":"github.com/fabric8-services/fabric8-foo/vendor/metric","time":"2018-07-13 16:16:32"}
+{"action":"Show","ctrl":"Status","level":"info","msg":"mount","route":"GET /api/status","time":"2018-07-13 16:16:32"}
+{"level":"info","msg":"Git Commit SHA:  HEAD","time":"2018-07-13 16:16:32"}
+{"level":"info","msg":"UTC Build Time:  2018-07-13T14:15:22Z","time":"2018-07-13 16:16:32"}
+{"level":"info","msg":"UTC Start Time:  2018-07-13T14:16:32Z","time":"2018-07-13 16:16:32"}
+{"level":"info","msg":"GOMAXPROCS:      4","time":"2018-07-13 16:16:32"}
+{"level":"info","msg":"NumCPU:          4","time":"2018-07-13 16:16:32"}
+~/code/go/src/github.com/fabric8-services/fabric8-foo> curl http://localhost:8080/api/status
+{"buildTime":"2018-07-13T14:15:22Z","commit":"HEAD","startTime":"2018-07-13T14:16:32Z"}
+----
+
+[*] In order to have the `commit` and `buildTime` values in the response to `GET /api/status`, the code generated for the Status controller needs to be changed as follows:
+ 
+----
+// Show runs the show action.
+func (c *StatusController) Show(ctx *app.ShowStatusContext) error {
+	// StatusController_Show: start_implement
+
+	// Put your logic here
+
+	// StatusController_Show: end_implement
+	res := &app.Status{
+		BuildTime: app.BuildTime,
+		Commit:    app.Commit,
+		StartTime: app.StartTime,
+	}
+	return ctx.OK(res)
+}
+----

@@ -1,0 +1,59 @@
+# Gopkg.toml example
+#
+# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# for detailed Gopkg.toml documentation.
+#
+# required = ["github.com/user/thing/cmd/thing"]
+# ignored = ["github.com/user/project/pkgX", "bitbucket.org/user/project/pkgA/pkgY"]
+#
+# [[constraint]]
+#   name = "github.com/user/project"
+#   version = "1.0.0"
+#
+# [[constraint]]
+#   name = "github.com/user/project2"
+#   branch = "dev"
+#   source = "github.com/myfork/project2"
+#
+# [[override]]
+#   name = "github.com/x/y"
+#   version = "2.4.0"
+#
+# [prune]
+#   non-go = false
+#   go-tests = true
+#   unused-packages = true
+
+
+required = [
+  "github.com/fabric8-services/fabric8-common/goasupport/jsonapi_errors_helpers", # needed by goa generator
+  "github.com/fabric8-services/fabric8-common/goasupport/status", # needed by goa generator
+  "github.com/goadesign/goa/cors",
+  "github.com/goadesign/goa/encoding/form",
+  "github.com/goadesign/goa/goagen",
+  "github.com/goadesign/goa/goagen/codegen",
+  "github.com/goadesign/goa/goagen/gen_app",
+  "github.com/goadesign/goa/goagen/gen_controller",
+  "github.com/goadesign/goa/goagen/gen_swagger",
+  "github.com/goadesign/goa/goagen/gen_client",
+  "github.com/goadesign/goa/goagen/gen_js",
+  "github.com/goadesign/goa/goagen/utils",
+  "github.com/goadesign/goa/goatest",
+  "github.com/davecgh/go-spew/spew",
+  "github.com/golang/lint/golint",
+  "github.com/fzipp/gocyclo",
+  "github.com/pilu/fresh", # used to rebuild if source changed while running
+]
+
+ignored = [
+  "github.com/fabric8-services/{{ .ProjectName }}/app",
+]
+
+
+[prune]
+  go-tests = true
+  unused-packages = true
+
+[[constraint]]
+  name = "github.com/fabric8-services/fabric8-common"
+  revision = "master"

@@ -15,8 +15,9 @@ bin
 # vendored deps are not kept in git
 vendor
 
+# generate goa code
+app
+swagger
+
 # tmp dir
 tmp
-
-# generated assets
-bootstrap/bindata.go

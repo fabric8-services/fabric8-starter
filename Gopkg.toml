@@ -24,38 +24,28 @@
 #   go-tests = true
 #   unused-packages = true
 
+required = ["github.com/go-bindata/go-bindata/go-bindata"]
 
-required = [
-  "github.com/fabric8-services/fabric8-common/makefile", # needed to import Makefile
-  "github.com/fabric8-services/fabric8-common/goasupport/jsonapi_errors_helpers", # needed by goa generator
-  "github.com/fabric8-services/fabric8-common/goasupport/status", # needed by goa generator
-  "github.com/goadesign/goa/cors",
-  "github.com/goadesign/goa/encoding/form",
-  "github.com/goadesign/goa/goagen",
-  "github.com/goadesign/goa/goagen/codegen",
-  "github.com/goadesign/goa/goagen/gen_app",
-  "github.com/goadesign/goa/goagen/gen_controller",
-  "github.com/goadesign/goa/goagen/gen_swagger",
-  "github.com/goadesign/goa/goagen/gen_client",
-  "github.com/goadesign/goa/goagen/gen_js",
-  "github.com/goadesign/goa/goagen/utils",
-  "github.com/goadesign/goa/goatest",
-  "github.com/davecgh/go-spew/spew",
-  "github.com/golang/lint/golint",
-  "github.com/fzipp/gocyclo",
-  "github.com/pilu/fresh", # used to rebuild if source changed while running
-]
+[[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.3"
 
-ignored = [
-  "github.com/fabric8-services/fabric8-starter/app",
-]
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  version = "1.0.0"
 
+[[constraint]]
+  name = "github.com/pkg/errors"
+  version = "0.8.0"
 
+[[constraint]]
+  name = "gopkg.in/src-d/go-git.v4"
+  revision = "v4.5.0"
+  
+[[constraint]]
+  name = "github.com/go-bindata/go-bindata"
+  revision = "v1.0.0"
+  
 [prune]
   go-tests = true
   unused-packages = true
-
-[[constraint]]
-  name = "github.com/fabric8-services/fabric8-common"
-  source = "github.com/xcoulon/fabric8-common"
-  revision = "7a4b91c"
