@@ -64,6 +64,7 @@ func main() {
 
 	// Initialize sentry client
 	haltSentry, err := sentry.InitializeSentryClient(
+		nil, // will use the `os.Getenv("Sentry_DSN")` instead
 		sentry.WithRelease(app.Commit),
 		sentry.WithEnvironment(config.GetEnvironment()),
 	)

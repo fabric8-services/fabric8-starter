@@ -29,7 +29,6 @@ func NewProject(fullName string) error {
 	log.Debugf("checking that directory `%s` does not exist yet...", baseDir)
 	if _, err := os.Stat(baseDir); err == nil {
 		return errors.Errorf("'%s' already exists", baseDir)
-		// return errors.Wrapf(err, "failed to check if '%s' exists or not", baseDir)
 	}
 	if err := os.MkdirAll(baseDir, os.ModePerm); err != nil {
 		return errors.Wrapf(err, "failed to make directory '%s'", baseDir)
@@ -45,7 +44,7 @@ func NewProject(fullName string) error {
 		filecontent := content
 		// process the asset as a golang text template instead of a static file if the file extension is `.tpl`
 		if ext == ".tpl" {
-			log.Debugf("processing '%s' as a template...", filename)
+			log.Infof("processing '%s' as a template...", filename)
 			filename = strings.TrimSuffix(filename, ".tpl") // remove the `.tpl` extension
 			log.Debugf(" -> '%s'", filename)
 			tpl, err := template.New(n).Parse(string(content))
@@ -68,7 +67,7 @@ func NewProject(fullName string) error {
 		targetDir := filepath.Dir(filename)
 		// make sure the target directory exists
 		if _, err := os.Stat(targetDir); err != nil {
-			log.Debugf("directory '%s' does not seem to exists and thus it will be created", targetDir)
+			log.Infof("directory '%s' does not seem to exists and thus it will be created", targetDir)
 			if err := os.MkdirAll(targetDir, os.ModePerm); err != nil {
 				return errors.Wrapf(err, "failed to make directory '%s'", targetDir)
 			}
